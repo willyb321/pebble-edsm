@@ -1,19 +1,20 @@
 var UI = require('ui');
-var Vector2 = require('vector2');
 var request = new XMLHttpRequest();
 var method = 'GET';
-var url = 'https://www.edsm.net/api-logs-v1/get-position/commanderName/willyb321';
+var url = 'https://www.edsm.net/api-logs-v1/get-position/commanderName/willyb321/showCoords/1';
+var x = [];
+request.open(method, url);
+request.send();
 // Specify the callback for when the request is completed
 request.onload = function() {
   // The request was successfully completed!
   console.log('Got response: ' + this.responseText);
   var nah = JSON.parse(this.responseText);
- var nahnah = nah;
+  var nahnahnah = ['x: ', JSON.parse(nah.coordinates.x), '\n', 'y: ', JSON.parse(nah.coordinates.y), '\n', 'z: ', JSON.parse(nah.coordinates.z)];
   var menu = new UI.Menu();
   var items = ['Location', 'Coordinates'];
-  var x = [];
-for(var i in nahnah) {
-    x[i] = nahnah[i];
+for(var i in nah) {
+    x[i] = nah[i];
   console.log(x[i]);
 }
  
@@ -28,17 +29,25 @@ menu.section(l, section);
 }
 menu.show();
 menu.on('select', function(event) {
-
+  console.log(event.itemIndex);
+if (event.item.title === 'Location') {
   // Show a card with clicked item details
   var detailCard = new UI.Card({
-    title: items[event.selectedIndex],
+    title: event.item.title,
+    body: nah.system
   });
-  for (var q; q < x.length; q++) {
-   detailCard.body = x[q];
-  }
-  // Show the new Card
   detailCard.show();
+} else if (event.item.title === 'Coordinates') {
+  var detailCard2 = new UI.Card({
+    title: event.item.title,
+    body: nahnahnah.join("")
+  });
+  detailCard2.show();
+}
+  console.log(nah.system);
+//   for (var q; q < x.length; q++) {
+//    detailCard.body = x[1];
+//   }
+  // Show the new Card
 });
  };
-request.open(method, url);
-request.send();
