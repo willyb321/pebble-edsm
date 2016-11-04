@@ -8,25 +8,34 @@ request.onload = function() {
   // The request was successfully completed!
   console.log('Got response: ' + this.responseText);
   var nah = JSON.parse(this.responseText);
- var nahnah = nah.system;
+ var nahnah = nah;
   var menu = new UI.Menu();
-
+  var items = ['Location', 'Coordinates'];
+  var x = [];
+for(var i in nahnah) {
+    x[i] = nahnah[i];
+  console.log(x[i]);
+}
+ 
+for(var l=1;l<4;l++) {
 var section = {
 title: 'Another section',
 items: [{
-  title: 'Location'
+  title: items[l-1]
 }]
 };
-menu.section(0, section); 
+menu.section(l, section);
+}
 menu.show();
 menu.on('select', function(event) {
 
   // Show a card with clicked item details
   var detailCard = new UI.Card({
-    title: 'Location',
-    body: nahnah
+    title: items[event.selectedIndex],
   });
-
+  for (var q; q < x.length; q++) {
+   detailCard.body = x[q];
+  }
   // Show the new Card
   detailCard.show();
 });
