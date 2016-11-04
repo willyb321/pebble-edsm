@@ -1,9 +1,9 @@
 {
     "appKeys": {},
     "capabilities": [
-        ""
+        "configurable"
     ],
-    "companyName": "wbwilliam7@gmail.com",
+    "companyName": "Willyb321",
     "longName": "edsmnet",
     "projectType": "pebblejs",
     "resources": {
@@ -40,8 +40,7 @@
     "shortName": "edsmnet",
     "targetPlatforms": [
         "aplite",
-        "basalt",
-        "chalk"
+        "basalt"
     ],
     "uuid": "60506347-1aa5-4fb5-91c3-21c18bb41409",
     "versionCode": 1,

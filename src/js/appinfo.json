@@ -1,0 +1,25 @@
+{
+  "uuid": "60506347-1aa5-4fb5-91c3-21c18bb41409",
+	"dependencies": {
+        "pebble-clay": "^1.0.0"
+    },
+  "shortName": "edsmnet",
+  "longName": "edsmnet",
+  "companyName": "Willyb321",
+  "esversion": 6,
+  "enableMultiJS": true,
+  "versionCode": 1,
+  "versionLabel": "1.0",
+  "capabilities": [
+    "configurable"
+  ],
+  "watchapp": {
+    "watchface": false
+  },
+	"appKeys": {"EDSMAPI": 0, "cmdrname": 1},
+  "targetPlatforms": [
+    "aplite",
+    "basalt"
+  ],
+  "sdkVersion": "3"
+}

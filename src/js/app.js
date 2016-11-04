@@ -1,7 +1,26 @@
+var Settings = require('settings');
+var Clay = require('pebble-clay');
+var clayConfig = require('./config');
+var clay = new Clay(clayConfig, null, {autoHandleEvents: false});
+
+Pebble.addEventListener('showConfiguration', function(e) {
+  Pebble.openURL(clay.generateUrl());
+});
+
+Pebble.addEventListener('webviewclosed', function(e) {
+  if (e && !e.response) {
+    return;
+  }
+  var dict = clay.getSettings(e.response);
+
+  // Save the Clay settings to the Settings module. 
+  Settings.option(dict);
+});
+var shittypiss = clay.getAllItems();
 var UI = require('ui');
 var request = new XMLHttpRequest();
 var method = 'GET';
-var url = 'https://www.edsm.net/api-logs-v1/get-position/commanderName/willyb321/showCoords/1';
+var url = 'https://www.edsm.net/api-logs-v1/get-position/commanderName/' + shittypiss + '/showCoords/1';
 var x = [];
 request.open(method, url);
 request.send();
@@ -50,4 +69,4 @@ if (event.item.title === 'Location') {
 //   }
   // Show the new Card
 });
- };
+};
