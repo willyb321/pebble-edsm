@@ -1,8 +1,9 @@
+/*jshint esversion:6*/
 var Settings = require('settings');
-var Clay = require('pebble-clay');
+var Clay = require('./clay');
 var clayConfig = require('./config');
 var clay = new Clay(clayConfig, null, {autoHandleEvents: false});
-
+var bala = [];
 Pebble.addEventListener('showConfiguration', function(e) {
   Pebble.openURL(clay.generateUrl());
 });
@@ -16,14 +17,27 @@ Pebble.addEventListener('webviewclosed', function(e) {
   // Save the Clay settings to the Settings module. 
   Settings.option(dict);
 });
-var shittypiss = clay.getAllItems();
+var cmdr = Settings.option('cmdrname');
+var api = Settings.option('EDSMAPI');
 var UI = require('ui');
 var request = new XMLHttpRequest();
+var request2 = new XMLHttpRequest();
 var method = 'GET';
-var url = 'https://www.edsm.net/api-logs-v1/get-position/commanderName/' + shittypiss + '/showCoords/1';
+var url = `https://www.edsm.net/api-logs-v1/get-position/commanderName/${cmdr}/showCoords/1`;
+var url2 = `https://www.edsm.net/api-commander-v1/get-credits/commanderName/${cmdr}/apiKey/${api}`;
 var x = [];
 request.open(method, url);
 request.send();
+request2.open(method, url2);
+request2.send();
+request2.onload = function() {
+	console.log('Got response: ' + this.responseText);
+	var cmdrcred = JSON.parse(this.responseText);
+	var bal = cmdrcred.credits[0].balance;
+	console.log(bal);
+	bala[0] = bal;
+	
+};
 // Specify the callback for when the request is completed
 request.onload = function() {
   // The request was successfully completed!
@@ -31,17 +45,17 @@ request.onload = function() {
   var nah = JSON.parse(this.responseText);
   var nahnahnah = ['x: ', JSON.parse(nah.coordinates.x), '\n', 'y: ', JSON.parse(nah.coordinates.y), '\n', 'z: ', JSON.parse(nah.coordinates.z)];
   var menu = new UI.Menu();
-  var items = ['Location', 'Coordinates'];
+  var items = ['Location', 'Coordinates', 'Balance'];
 for(var i in nah) {
     x[i] = nah[i];
   console.log(x[i]);
 }
  
-for(var l=1;l<4;l++) {
+for(var l=0;l<3;l++) {
 var section = {
 title: 'Another section',
 items: [{
-  title: items[l-1]
+  title: items[l]
 }]
 };
 menu.section(l, section);
@@ -62,11 +76,12 @@ if (event.item.title === 'Location') {
     body: nahnahnah.join("")
   });
   detailCard2.show();
+} else if (event.item.title === 'Balance') {
+  var detailCard3 = new UI.Card({
+    title: event.item.title,
+    body: bala[0] + '\n Credits' 
+  });
+  detailCard3.show();
 }
-  console.log(nah.system);
-//   for (var q; q < x.length; q++) {
-//    detailCard.body = x[1];
-//   }
-  // Show the new Card
 });
 };

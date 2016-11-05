@@ -15,7 +15,7 @@ module.exports = [{
 	  {
 		  "type": "input",
 		  "appKey": "cmdrname",
-		  "defaultValue": "willyb321",
+		  "defaultValue": "",
 		  "label": "Commander Name",
 		  "id": "cmdrName"
 	  },
