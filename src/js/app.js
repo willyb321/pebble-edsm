@@ -20,11 +20,13 @@ Pebble.addEventListener('webviewclosed', function(e) {
 var cmdr = Settings.option('cmdrname');
 var api = Settings.option('EDSMAPI');
 var UI = require('ui');
+var system = [];
 var request = new XMLHttpRequest();
 var request2 = new XMLHttpRequest();
+var request3 = new XMLHttpRequest();
 var method = 'GET';
-var url = `https://www.edsm.net/api-logs-v1/get-position/commanderName/${cmdr}/showCoords/1`;
-var url2 = `https://www.edsm.net/api-commander-v1/get-credits/commanderName/${cmdr}/apiKey/${api}`;
+var url = 'https://www.edsm.net/api-logs-v1/get-position/commanderName/' + cmdr + '/showCoords/1';
+var url2 = 'https://www.edsm.net/api-commander-v1/get-credits/commanderName/' + cmdr + '/apiKey/' + api;
 var x = [];
 request.open(method, url);
 request.send();
@@ -45,13 +47,20 @@ request.onload = function() {
   var nah = JSON.parse(this.responseText);
   var nahnahnah = ['x: ', JSON.parse(nah.coordinates.x), '\n', 'y: ', JSON.parse(nah.coordinates.y), '\n', 'z: ', JSON.parse(nah.coordinates.z)];
   var menu = new UI.Menu();
-  var items = ['Location', 'Coordinates', 'Balance'];
+  var items = ['Location', 'Coordinates', 'Balance', 'Within 30ly'];
+  var url3 = 'https://www.edsm.net/api-v1/cube-systems/systemName/' + nah.system + '/size/30';
+	request3.open(method, url3);
+	request3.send();
+	request3.onload = function() {
+		var cube = JSON.parse(this.responseText);
+		system[0] = Object.keys(cube).length;
+	};
 for(var i in nah) {
     x[i] = nah[i];
   console.log(x[i]);
 }
  
-for(var l=0;l<3;l++) {
+for(var l=0;l<4;l++) {
 var section = {
 title: 'Another section',
 items: [{
@@ -82,6 +91,12 @@ if (event.item.title === 'Location') {
     body: bala[0] + '\n Credits' 
   });
   detailCard3.show();
+} else if (event.item.title === 'Within 30ly') {
+  var detailCard4 = new UI.Card({
+    title: event.item.title,
+    body: system[0] + ' System(s) within 30ly of ' + nah.system 
+  });
+  detailCard4.show();
 }
 });
 };
